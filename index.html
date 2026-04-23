@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Daniel DE-BERTHIN — Portfolio</title>
+  <style>
+    /* ===================== RESET & BASE ===================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    :root {
+      --teal: #2dd4bf;
+      --teal-10: rgba(45,212,191,0.10);
+      --teal-20: rgba(45,212,191,0.20);
+      --teal-40: rgba(45,212,191,0.40);
+      --blue: #60a5fa;
+      --blue-10: rgba(96,165,250,0.10);
+      --blue-20: rgba(96,165,250,0.20);
+      --green: #34d399;
+      --purple: #a78bfa;
+      --orange: #fb923c;
+      --rose: #fb7185;
+      --bg: #080d14;
+      --surface: rgba(17,24,39,0.75);
+      --border: rgba(255,255,255,0.06);
+      --text: #cbd5e1;
+      --muted: #64748b;
+      --white: #f1f5f9;
+      --mono: 'Courier New', Courier, monospace;
+      --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    }
+
+    ::selection { background: var(--teal); color: #080d14; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      overflow-x: hidden;
+      line-height: 1.6;
+      cursor: crosshair;
+    }
+
+    a, button { cursor: pointer; }
+    button { font: inherit; }
+
+    /* ===================== GRID + SCANLINES BG ===================== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(45,212,191,0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(45,212,191,0.035) 1px, transparent 1px),
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
+      background-size: 60px 60px, 60px 60px, 100% 100%;
+      pointer-events: none;
+      z-index: 9998;
+    }
+
+    /* ===================== AMBIENT GLOWS ===================== */
+    .glow-orb {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(80px);
+    }
+    .glow-1 { width:600px; height:600px; top:-150px; left:-150px; background: radial-gradient(circle, rgba(45,212,191,0.07), transparent 70%); }
+    .glow-2 { width:500px; height:500px; top:30%; right:-150px; background: radial-gradient(circle, rgba(96,165,250,0.06), transparent 70%); }
+    .glow-3 { width:400px; height:400px; bottom:0; left:30%; background: radial-gradient(circle, rgba(45,212,191,0.05), transparent 70%); }
+
+    /* ===================== LAYOUT ===================== */
+    .container { max-width:1200px; margin:0 auto; padding:0 24px; }
+    .container-lg { max-width:900px; margin:0 auto; padding:0 24px; }
+    .z10 { position:relative; z-index:10; }
+
+    /* ===================== TYPOGRAPHY ===================== */
+    .label { font-family:var(--mono); font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--teal); }
+    h1, h2, h3, h4 { color:var(--white); font-weight:800; line-height:1.1; }
+    h1 { font-size:clamp(3rem, 8vw, 5.5rem); }
+    h2 { font-size:clamp(2rem, 5vw, 3.5rem); }
+    h3 { font-size:clamp(1.1rem, 2.5vw, 1.4rem); font-weight:700; }
+
+    /* ===================== ANIMATIONS ===================== */
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    @keyframes pulse-glow { 0%,100%{box-shadow:0 0 20px var(--teal-20)} 50%{box-shadow:0 0 40px var(--teal-40),0 0 80px var(--teal-10)} }
+    @keyframes scan { 0%{top:-2px} 100%{top:100%} }
+    @keyframes bounce-y { 0%,100%{transform:translateY(0)} 50%{transform:translateY(6px)} }
+    @keyframes glitch1 { 0%,100%{clip-path:inset(0 0 95% 0);transform:translate(-2px,0)}20%{clip-path:inset(30% 0 55% 0);transform:translate(2px,0)}60%{clip-path:inset(80% 0 5% 0);transform:translate(1px,0)} }
+    @keyframes glitch2 { 0%,100%{clip-path:inset(10% 0 80% 0);transform:translate(2px,0)}25%{clip-path:inset(45% 0 40% 0);transform:translate(-2px,0)}75%{clip-path:inset(75% 0 10% 0);transform:translate(1px,0)} }
+
+    .cursor-blink { animation:blink 1s step-end infinite; }
+    .float { animation:float 4s ease-in-out infinite; }
+    .pulse-glow { animation:pulse-glow 3s ease-in-out infinite; }
+    .bounce-y { animation:bounce-y 1.5s ease-in-out infinite; }
+
+    .glitch { position:relative; display:inline-block; }
+    .glitch::before,
+    .glitch::after { content:attr(data-text); position:absolute; inset:0; background:transparent; }
+    .glitch::before { color:var(--teal); animation:glitch1 5s infinite linear; animation-delay:2s; }
+    .glitch::after { color:#f87171; animation:glitch2 5s infinite linear; animation-delay:2.4s; }
+
+    /* ===================== REVEAL ===================== */
+    .reveal { opacity:0; transform:translateY(22px); transition:opacity .7s cubic-bezier(.4,0,.2,1), transform .7s cubic-bezier(.4,0,.2,1); }
+    .reveal.active { opacity:1; transform:none; }
+    .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}
+    .d4{transition-delay:.4s}.d5{transition-delay:.5s}.d6{transition-delay:.6s}
+
+    /* ===================== CARD ===================== */
+    .card {
+      background:var(--surface);
+      border:1px solid var(--border);
+      border-radius:12px;
+      backdrop-filter:blur(12px);
+      transition:border-color .3s,transform .3s;
+      position:relative;
+      overflow:hidden;
+    }
+    .card:hover { border-color:var(--teal-40); transform:translateY(-4px); }
+    .card-accent { position:absolute; top:0; left:0; right:0; height:2px; }
+
+    /* ===================== UTILITIES ===================== */
+    .row-between { display:flex; align-items:center; justify-content:space-between; }
+    .row-wrap { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+    .overlay-top {
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to top, rgba(17,24,39,0.9), transparent);
+    }
+    .card-pad { padding:28px; }
+    .mono { font-family:var(--mono); }
+
+    /* ===================== GLOW DIVIDER ===================== */
+    .glow-line { height:1px; background:linear-gradient(90deg, transparent, var(--teal), transparent); opacity:.25; margin:0 auto; max-width:900px; }
+
+    /* ===================== BADGES ===================== */
+    .badge {
+      display:inline-flex;
+      align-items:center;
+      padding:5px 12px;
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+      background:rgba(255,255,255,0.03);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:4px;
+      transition:all .2s;
+    }
+    .badge:hover { background:var(--teal-10); border-color:var(--teal-40); color:var(--teal); transform:translateY(-2px); }
+
+    .hero-tag { font-family:var(--mono); font-size:11px; padding:6px 14px; border-radius:3px; }
+    .tag-teal  { color:#5eead4; background:var(--teal-10); border:1px solid rgba(45,212,191,0.25); }
+    .tag-blue  { color:#93c5fd; background:var(--blue-10); border:1px solid rgba(96,165,250,0.25); }
+    .tag-green { color:#6ee7b7; background:rgba(52,211,153,0.08); border:1px solid rgba(52,211,153,0.25); }
+
+    /* ===================== BUTTONS ===================== */
+    .btn-primary,
+    .btn-secondary,
+    .social-btn,
+    .nav-link,
+    .dock-btn,
+    .proj-link,
+    .scroll-hint {
+      background: none;
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:14px 28px;
+      background:var(--teal);
+      color:#080d14;
+      font-weight:800;
+      font-size:14px;
+      border-radius:4px;
+      transition:opacity .2s, transform .1s;
+    }
+    .btn-primary:active { transform:scale(.97); }
+    .btn-primary:hover { opacity:.9; }
+
+    .btn-secondary {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:14px 28px;
+      background:rgba(255,255,255,0.03);
+      color:var(--text);
+      font-weight:600;
+      font-size:14px;
+      font-family:var(--mono);
+      border:1px solid var(--border);
+      border-radius:4px;
+      transition:border-color .2s, color .2s, transform .1s;
+    }
+    .btn-secondary:hover { border-color:var(--teal-40); color:var(--white); }
+    .btn-secondary:active { transform:scale(.97); }
+
+    /* ===================== NAV DESKTOP ===================== */
+    nav.desktop {
+      display:none;
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      z-index:100;
+      height:60px;
+      background:rgba(8,13,20,0.88);
+      border-bottom:1px solid var(--border);
+      backdrop-filter:blur(20px);
+      align-items:center;
+      justify-content:space-between;
+      padding:0 40px;
+    }
+    @media (min-width:768px) { nav.desktop { display:flex; } }
+
+    .nav-logo { font-family:var(--mono); font-size:13px; color:var(--text); }
+    .nav-logo span { color:var(--teal); }
+    .nav-links { display:flex; gap:4px; }
+    .nav-link {
+      padding:7px 14px;
+      border-radius:6px;
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+      transition:color .2s, background .2s;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+    .nav-link:hover { color:var(--white); background:rgba(255,255,255,0.04); }
+    .nav-link .dot { width:5px; height:5px; border-radius:50%; background:var(--teal); display:none; }
+    .nav-link.active { color:var(--teal); }
+    .nav-link.active .dot { display:block; }
+    .nav-cta {
+      font-family:var(--mono);
+      font-size:12px;
+      padding:7px 16px;
+      border-radius:4px;
+      border:1px solid var(--teal-40);
+      color:var(--teal);
+      background:none;
+      text-decoration:none;
+      transition:background .2s;
+    }
+    .nav-cta:hover { background:var(--teal-10); }
+
+    /* ===================== NAV MOBILE ===================== */
+    nav.mobile {
+      display:flex;
+      position:fixed;
+      bottom:18px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:100;
+      background:rgba(17,24,39,0.92);
+      border:1px solid var(--border);
+      border-radius:16px;
+      backdrop-filter:blur(20px);
+      padding:8px;
+      gap:4px;
+      width:90%;
+      max-width:340px;
+    }
+    @media (min-width:768px) { nav.mobile { display:none; } }
+
+    .dock-btn {
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:10px 6px;
+      border-radius:10px;
+      color:var(--muted);
+      transition:color .2s, background .2s;
+    }
+    .dock-btn:hover { color:var(--white); }
+    .dock-btn.active { color:var(--teal); background:var(--teal-10); }
+    .dock-btn svg { width:20px; height:20px; }
+
+    /* ===================== HERO ===================== */
+    #accueil { min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding-top:60px; }
+    .hero-grid { display:grid; grid-template-columns:1fr; gap:48px; align-items:center; }
+    @media (min-width:900px) { .hero-grid { grid-template-columns:1fr 1fr; } }
+
+    .hero-title-line { color:var(--teal); display:block; }
+    .hero-tags { display:flex; flex-wrap:wrap; gap:10px; margin:24px 0; }
+    .hero-desc { color:var(--muted); font-size:18px; max-width:440px; margin-bottom:36px; }
+    .hero-btns { display:flex; flex-wrap:wrap; gap:14px; margin-bottom:36px; }
+    .hero-social { display:flex; gap:12px; }
+
+    .social-btn {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:40px;
+      height:40px;
+      border-radius:4px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.02);
+      color:var(--muted);
+      transition:color .2s, border-color .2s, transform .2s;
+    }
+    .social-btn:hover { color:var(--teal); border-color:var(--teal-40); transform:translateY(-3px); }
+    .social-btn svg { width:18px; height:18px; }
+
+    /* ===================== TERMINAL ===================== */
+    .terminal { background:rgba(0,0,0,0.55); border:1px solid rgba(45,212,191,0.2); border-radius:10px; overflow:hidden; position:relative; }
+    .term-bar { display:flex; align-items:center; gap:6px; padding:12px 16px; background:rgba(255,255,255,0.03); border-bottom:1px solid rgba(255,255,255,0.05); }
+    .term-dot { width:10px; height:10px; border-radius:50%; }
+    .term-title { font-family:var(--mono); font-size:11px; color:var(--muted); margin-left:8px; }
+    .term-body { padding:20px; font-family:var(--mono); font-size:13px; line-height:1.9; }
+    .term-prompt { color:var(--teal); }
+    .term-key { color:var(--blue); }
+    .term-val { color:#86efac; }
+    .term-num { color:#fde68a; }
+    .scan-line {
+      position:absolute;
+      left:0;
+      right:0;
+      height:2px;
+      background:linear-gradient(90deg, transparent, rgba(45,212,191,0.5), transparent);
+      animation:scan 4s linear infinite;
+      pointer-events:none;
+    }
+    .term-corner { position:relative; padding:4px; }
+    .term-corner::before {
+      content:'';
+      position:absolute;
+      top:0;
+      left:0;
+      width:14px;
+      height:14px;
+      border-top:1px solid var(--teal);
+      border-left:1px solid var(--teal);
+    }
+    .term-corner::after {
+      content:'';
+      position:absolute;
+      bottom:0;
+      right:0;
+      width:14px;
+      height:14px;
+      border-bottom:1px solid var(--teal);
+      border-right:1px solid var(--teal);
+    }
+    .stats-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-top:12px; }
+    .stat-box { background:rgba(45,212,191,0.05); border:1px solid rgba(45,212,191,0.15); border-radius:8px; padding:16px 10px; text-align:center; }
+    .stat-num { font-size:24px; font-weight:800; line-height:1; }
+    .stat-lbl { font-family:var(--mono); font-size:10px; color:var(--muted); margin-top:4px; }
+
+    /* ===================== SECTIONS ===================== */
+    section, footer { position:relative; z-index:10; }
+    .section-pad { padding:96px 0; }
+    .sec-header { margin-bottom:56px; }
+    .sec-header h2 { margin-top:6px; }
+
+    /* ===================== PROFILE CARDS ===================== */
+    .about-grid { display:grid; grid-template-columns:1fr; gap:24px; }
+    @media (min-width:900px) { .about-grid { grid-template-columns:1.2fr .8fr; } }
+    .about-card { padding:32px; }
+    .about-card p { color:var(--muted); font-size:15px; line-height:1.8; margin-top:16px; }
+    .about-list { display:flex; flex-wrap:wrap; gap:10px; margin-top:20px; }
+
+    .profile-grid { display:grid; grid-template-columns:1fr; gap:20px; }
+    @media (min-width:640px) { .profile-grid { grid-template-columns:1fr 1fr; } }
+    @media (min-width:960px) { .profile-grid { grid-template-columns:1fr 1fr 1fr; } }
+    .profile-card { padding:32px; }
+    .profile-card .icon { width:40px; height:40px; margin-bottom:20px; }
+    .profile-card p { color:var(--muted); font-size:14px; line-height:1.7; margin:12px 0 20px; }
+    .profile-card .tags { display:flex; flex-wrap:wrap; gap:8px; }
+
+    /* ===================== TIMELINE ===================== */
+    .timeline { position:relative; padding-left:44px; }
+    .timeline::before {
+      content:'';
+      position:absolute;
+      left:10px;
+      top:8px;
+      bottom:0;
+      width:1px;
+      background:linear-gradient(to bottom, var(--teal), rgba(96,165,250,0.4), transparent);
+    }
+    .tl-item { position:relative; margin-bottom:28px; }
+    .tl-dot { position:absolute; left:-39px; top:22px; width:14px; height:14px; border-radius:50%; border:2px solid var(--teal); background:var(--bg); box-shadow:0 0 10px var(--teal-40); }
+    .tl-dot.blue { border-color:var(--blue); box-shadow:0 0 10px var(--blue-20); }
+    .exp-date { display:inline-block; font-family:var(--mono); font-size:11px; padding:4px 12px; border-radius:3px; margin-bottom:16px; }
+    .exp-date.teal { color:#5eead4; background:var(--teal-10); border:1px solid rgba(45,212,191,0.2); }
+    .exp-date.blue { color:#93c5fd; background:var(--blue-10); border:1px solid rgba(96,165,250,0.2); }
+    .exp-where { display:flex; align-items:center; gap:6px; color:var(--muted); font-size:13px; margin:4px 0 16px; }
+    .exp-where svg { width:13px; height:13px; }
+    .exp-list { list-style:none; display:flex; flex-direction:column; gap:10px; }
+    .exp-list li { display:flex; align-items:flex-start; gap:10px; font-size:14px; color:var(--muted); }
+    .exp-bullet { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:7px; }
+    .exp-bullet.teal { background:var(--teal); }
+    .exp-bullet.blue { background:var(--blue); }
+
+    /* ===================== PROJECTS ===================== */
+    .projects-scroll { display:flex; gap:20px; overflow-x:auto; padding-bottom:16px; margin:0 -24px; padding-left:24px; padding-right:24px; scroll-snap-type:x mandatory; }
+    .projects-scroll::-webkit-scrollbar { display:none; }
+    .projects-scroll { -ms-overflow-style:none; scrollbar-width:none; }
+    @media (min-width:768px) { .projects-scroll { display:grid; grid-template-columns:1fr 1fr; overflow-x:visible; margin:0; padding:0; } }
+    .proj-card { min-width:82vw; scroll-snap-align:center; flex-shrink:0; display:flex; flex-direction:column; }
+    @media (min-width:768px) { .proj-card { min-width:0; } }
+    .proj-preview { height:180px; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.4); border-bottom:1px solid var(--border); position:relative; overflow:hidden; }
+    .proj-preview svg.icon-bg { width:64px; height:64px; color:rgba(255,255,255,0.06); transition:color .6s, transform .6s; }
+    .card:hover .proj-preview svg.icon-bg { color:rgba(45,212,191,0.15); transform:scale(1.15); }
+    .proj-badge { position:absolute; top:12px; right:12px; font-family:var(--mono); font-size:11px; padding:4px 10px; border-radius:3px; display:flex; align-items:center; gap:6px; }
+    .proj-badge.online { color:var(--teal); background:rgba(0,0,0,0.6); border:1px solid var(--teal-40); }
+    .proj-badge.tech { color:var(--blue); background:rgba(0,0,0,0.6); border:1px solid var(--blue-20); }
+    .proj-badge .pulse { width:6px; height:6px; border-radius:50%; background:var(--teal); animation:blink 1.2s ease-in-out infinite; }
+    .proj-body { padding:24px; flex:1; display:flex; flex-direction:column; }
+    .proj-num { font-family:var(--mono); font-size:11px; color:var(--muted); margin-bottom:12px; }
+    .proj-link { padding:6px; border-radius:4px; border:1px solid var(--border); color:var(--muted); transition:color .2s, border-color .2s; }
+    .proj-link:hover { color:var(--teal); border-color:var(--teal-40); }
+    .proj-link svg { width:15px; height:15px; }
+    .proj-desc { color:var(--muted); font-size:14px; line-height:1.7; flex:1; margin:10px 0 20px; }
+    .proj-tags { display:flex; flex-wrap:wrap; gap:8px; }
+
+    /* ===================== SKILLS ===================== */
+    .skills-grid { display:grid; grid-template-columns:1fr; gap:16px; }
+    @media (min-width:600px) { .skills-grid { grid-template-columns:1fr 1fr; } }
+    @media (min-width:960px) { .skills-grid { grid-template-columns:1fr 1fr 1fr; } }
+    .skill-card { padding:28px; }
+    .skill-card .head { display:flex; align-items:center; gap:10px; margin-bottom:20px; }
+    .skill-card .head svg { width:22px; height:22px; }
+    .skill-card .head span { font-family:var(--mono); font-size:13px; color:var(--white); }
+    .skill-card .badges { display:flex; flex-wrap:wrap; gap:8px; }
+
+    /* ===================== FOOTER ===================== */
+    footer { padding:80px 24px 40px; }
+    .footer-inner { max-width:700px; margin:0 auto; text-align:center; }
+    .footer-inner p { color:var(--muted); font-size:17px; max-width:460px; margin:0 auto 48px; }
+    .footer-btns { display:flex; flex-wrap:wrap; gap:14px; justify-content:center; align-items:center; }
+    .footer-loc { display:flex; align-items:center; gap:8px; color:var(--muted); font-size:14px; }
+    .footer-loc svg { width:16px; height:16px; }
+    .footer-bottom { max-width:900px; margin:60px auto 0; padding-top:24px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; font-family:var(--mono); font-size:12px; color:var(--muted); }
+    .footer-bottom .eof { color:var(--teal); }
+
+    /* ===================== SCROLL HINT ===================== */
+    .scroll-hint { display:none; flex-direction:column; align-items:center; gap:6px; color:var(--muted); font-family:var(--mono); font-size:11px; margin-top:56px; transition:color .2s; }
+    @media (min-width:768px) { .scroll-hint { display:flex; } }
+    .scroll-hint:hover { color:var(--teal); }
+    .scroll-hint svg { width:18px; height:18px; }
+  </style>
+</head>
+<body>
+  <div class="glow-orb glow-1"></div>
+  <div class="glow-orb glow-2"></div>
+  <div class="glow-orb glow-3"></div>
+
+  <div id="nav-desktop-root"></div>
+  <div id="nav-mobile-root"></div>
+
+  <div class="z10" style="padding-bottom:80px">
+    <section id="accueil">
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <div class="reveal d1">
+              <p class="label">&lt; portfolio /&gt;</p>
+              <h1 style="margin-top:12px">
+                <span class="glitch" data-text="Daniel">Daniel</span>
+                <span class="hero-title-line">DE-BERTHIN</span>
+              </h1>
+            </div>
+
+            <div class="reveal d2">
+              <div class="hero-tags" id="hero-tags"></div>
+            </div>
+
+            <div class="reveal d3">
+              <p class="hero-desc">Étudiant-entrepreneur passionné par l'automatisation, la cybersécurité et la gestion d'infrastructures. Je conçois, sécurise et livre des solutions IT de bout en bout.</p>
+            </div>
+
+            <div class="reveal d4">
+              <div class="hero-btns">
+                <a href="#contact" data-scroll-target="contact" class="btn-primary pulse-glow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  Me contacter
+                </a>
+                <button class="btn-secondary" type="button">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  CV.pdf
+                </button>
+              </div>
+            </div>
+
+            <div class="reveal d5">
+              <div class="hero-social" id="hero-social"></div>
+            </div>
+
+            <button class="scroll-hint bounce-y" data-scroll-target="profil" type="button">
+              scroll
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+
+          <div class="reveal d3" id="hero-right" hidden>
+            <div class="float">
+              <div class="term-corner">
+                <div class="terminal">
+                  <div class="term-bar">
+                    <span class="term-dot" style="background:#ff5f57"></span>
+                    <span class="term-dot" style="background:#febc2e"></span>
+                    <span class="term-dot" style="background:#28c840"></span>
+                    <span class="term-title">~/daniel/status.sh</span>
+                  </div>
+                  <div class="term-body">
+                    <div><span class="term-prompt">$ </span><span style="color:var(--text)">whoami</span></div>
+                    <div style="color:var(--muted); padding-left:12px">daniel.de-berthin</div>
+                    <div style="margin-top:12px"><span class="term-prompt">$ </span><span style="color:var(--text)">cat profile.json</span></div>
+                    <div style="padding-left:12px">
+                      <div><span class="term-key">"role"</span>: <span class="term-val">"Ingénieur DevOps &amp; CyberSec"</span>,</div>
+                      <div><span class="term-key">"location"</span>: <span class="term-val">"Reims / Paris / Nantes"</span>,</div>
+                      <div><span class="term-key">"status"</span>: <span class="term-val">"open_to_opportunities"</span>,</div>
+                      <div><span class="term-key">"focus"</span>: <span class="term-num">"automation / security / delivery"</span></div>
+                    </div>
+                    <div style="margin-top:12px"><span class="term-prompt">$ </span><span id="term-typing" style="color:var(--text)"></span><span class="cursor-blink" style="color:var(--teal)">▋</span></div>
+                  </div>
+                  <div class="scan-line"></div>
+                </div>
+              </div>
+              <div class="stats-row" id="hero-stats"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-line" style="margin:16px auto"></div>
+
+    <section id="apropos" class="section-pad">
+      <div class="container">
+        <div class="sec-header reveal"><p class="label">01 / à propos</p><h2>Qui je suis</h2></div>
+        <div class="about-grid">
+          <article class="card about-card reveal d1" id="about-content"></article>
+          <article class="card about-card reveal d2">
+            <div class="card-accent" style="background:linear-gradient(90deg, var(--teal), transparent)"></div>
+            <p class="label">repères</p>
+            <h3 style="margin-top:10px">Ce qui me définit</h3>
+            <div class="about-list" id="about-highlights"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-line"></div>
+
+    <section id="profil" class="section-pad">
+      <div class="container">
+        <div class="sec-header reveal"><p class="label">01 / profil</p><h2>À Propos</h2></div>
+        <div class="profile-grid" id="profile-grid"></div>
+      </div>
+    </section>
+
+    <div class="glow-line"></div>
+
+    <section id="experiences" class="section-pad">
+      <div class="container-lg">
+        <div class="sec-header reveal"><p class="label">02 / expériences</p><h2>Parcours</h2></div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+    </section>
+
+    <div class="glow-line"></div>
+
+    <section id="projets" class="section-pad">
+      <div class="container">
+        <div class="sec-header reveal"><p class="label">03 / projets</p><h2>Projets Phares</h2></div>
+        <div class="projects-scroll reveal d1" id="projects-grid"></div>
+      </div>
+    </section>
+
+    <div class="glow-line"></div>
+
+    <section id="competences" class="section-pad">
+      <div class="container">
+        <div class="sec-header reveal"><p class="label">04 / stack</p><h2>Stack Technique</h2></div>
+        <div class="skills-grid" id="skills-grid"></div>
+      </div>
+    </section>
+
+    <footer id="contact">
+      <div class="glow-line" style="margin-bottom:56px"></div>
+      <div class="footer-inner reveal">
+        <p class="label" style="margin-bottom:10px">05 / contact</p>
+        <h2 style="margin-bottom:16px">Prêt à innover ?</h2>
+        <p>Si mon profil correspond à votre équipe, discutons de la façon dont nous pouvons atteindre vos objectifs techniques.</p>
+        <div class="footer-btns">
+          <a href="mailto:danideber1@gmail.com" class="btn-primary pulse-glow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            danideber1@gmail.com
+          </a>
+          <div class="footer-loc">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Reims / Paris / Nantes
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 Daniel DE-BERTHIN</span>
+        <span class="eof">EOF</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const ICONS = {
+      home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>',
+      user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>',
+      briefcase: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"></path></svg>',
+      layers: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>',
+      grid: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect></svg>',
+      github: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"></path></svg>',
+      linkedin: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>',
+      shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>',
+      code: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>',
+      shieldCheck: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>',
+      projectGrid: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="5"></rect><rect x="16" y="3" width="5" height="5"></rect><rect x="3" y="16" width="5" height="5"></rect><path d="M21 16h-3a2 2 0 00-2 2v3"></path><path d="M21 21v.01"></path><path d="M12 7v3a2 2 0 01-2 2H7"></path></svg>',
+      marker: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>',
+      external: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"></path></svg>',
+      cloud: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"></path></svg>',
+      shieldAlert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>',
+      server: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"></rect><rect x="2" y="14" width="20" height="8" rx="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>',
+      brackets: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>',
+      list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>',
+      database: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>'
+    };
+
+    const DATA = {
+      nav: [
+        { id: 'accueil', label: 'accueil', icon: 'home' },
+        { id: 'apropos', label: 'à propos', icon: 'user' },
+        { id: 'profil', label: 'profil', icon: 'user' },
+        { id: 'experiences', label: 'expériences', icon: 'briefcase' },
+        { id: 'projets', label: 'projets', icon: 'layers' },
+        { id: 'competences', label: 'compétences', icon: 'grid' }
+      ],
+      heroTags: [
+        { label: 'DevOps', className: 'tag-teal' },
+        { label: 'Cybersécurité', className: 'tag-blue' },
+        { label: 'Chef de Projet IT', className: 'tag-green' }
+      ],
+      socialLinks: [
+        { href: '#', icon: 'github', label: 'GitHub' },
+        { href: '#', icon: 'linkedin', label: 'LinkedIn' },
+        { href: '#', icon: 'shield', label: 'Profil sécurité' }
+      ],
+      stats: [
+        { value: '2+', label: 'ans XP', color: 'var(--blue)' },
+        { value: '3', label: 'villes', color: 'var(--teal)' },
+        { value: '20+', label: 'outils', color: 'var(--green)' }
+      ],
+      about: {
+        intro: "Je m'appelle Daniel DE-BERTHIN. Je suis étudiant-entrepreneur et j’évolue à l’intersection du DevOps, de la cybersécurité et de la gestion de projet IT.",
+        paragraphs: [
+          "J’aime construire des environnements fiables, automatiser les tâches répétitives et transformer des besoins techniques en solutions concrètes, utiles et maintenables.",
+          "Mon approche repose sur trois piliers : la rigueur dans l’exécution, la curiosité technique au quotidien et une vraie attention portée à la qualité de livraison.",
+          "Au-delà de la technique, j’apprécie aussi le travail d’équipe, la structuration des projets et la capacité à faire avancer un sujet de bout en bout, de l’idée jusqu’à la mise en production."
+        ],
+        highlights: [
+          'Approche orientée résultat',
+          'Culture de l’automatisation',
+          'Sens du détail',
+          'Communication claire'
+        ]
+      },
+      profileCards: [
+        {
+          title: 'DevOps & Automatisation',
+          text: "Je vois l'automatisation comme une façon d'aborder le monde. Déploiement CI/CD, conteneurisation (Docker, LXC) et IaC (Terraform) pour optimiser les processus à grande échelle.",
+          tags: ['Docker', 'Terraform', 'CI/CD'],
+          accent: 'var(--teal)',
+          icon: 'code',
+          iconColor: 'var(--teal)',
+          delay: 'd1'
+        },
+        {
+          title: 'Cybersécurité',
+          text: 'Passionné par la sécurité offensive et défensive, je développe des compétences en pentesting, configuration pare-feu, durcissement des systèmes et audit de sécurité.',
+          tags: ['Pentesting', 'Burp Suite', 'Active Directory'],
+          accent: 'var(--blue)',
+          icon: 'shieldCheck',
+          iconColor: 'var(--blue)',
+          delay: 'd2'
+        },
+        {
+          title: 'Gestion de Projet IT',
+          text: 'Application rigoureuse des méthodes Agile Scrum. Planification, suivi des sprints et communication fluide entre équipes techniques et clients.',
+          tags: ['Scrum', 'Jira', 'Trello'],
+          accent: 'var(--green)',
+          icon: 'projectGrid',
+          iconColor: 'var(--green)',
+          delay: 'd3'
+        }
+      ],
+      experiences: [
+        {
+          date: 'Sept. 2025 — Août 2026',
+          dateClass: 'teal',
+          company: 'NXO, Nantes',
+          title: 'Ingénieur Incident & Automatisation',
+          bullets: [
+            "Conception et déploiement d'outils d'automatisation pour la gestion des incidents réseau.",
+            'Support technique avancé sur infrastructures réseau multi-sites.'
+          ],
+          colorClass: 'teal',
+          delay: 'd1'
+        },
+        {
+          date: '2024 — 2026',
+          dateClass: 'blue',
+          company: "Créativ'Labz, Reims",
+          title: 'Étudiant-Entrepreneur IT',
+          bullets: [
+            'Planification de sprints Scrum, suivi via Jira et Trello.',
+            'Setup infrastructure IT et définition des politiques de sécurité.'
+          ],
+          colorClass: 'blue',
+          delay: 'd2'
+        }
+      ],
+      projects: [
+        {
+          number: '01 / homelab',
+          title: 'Homelab et Infrastructure',
+          description: "Déploiement d'un homelab complet avec Proxmox, réseau PFsense segmenté en VLANs, conteneurs LXC, monitoring Grafana/Prometheus et accès VPN sécurisé.",
+          tags: ['Proxmox', 'PFsense', 'Grafana', 'OpenVPN'],
+          badge: { text: 'En ligne', className: 'online', pulse: true },
+          previewIcon: 'server'
+        },
+        {
+          number: '02 / devops',
+          title: 'Automatisation CI/CD et IaC',
+          description: "Création de pipelines CI/CD avec GitLab Runner, provisionnement d'infrastructures Cloud as Code via Terraform et gestion des déploiements Docker conteneurisés.",
+          tags: ['GitLab CI', 'Terraform', 'Docker'],
+          badge: { text: 'GitLab CI', className: 'tech', pulse: false },
+          previewIcon: 'briefcase'
+        }
+      ],
+      skillGroups: [
+        { title: 'DevOps et Cloud', icon: 'cloud', color: 'var(--teal)', items: ['Docker','LXC','Gitlab CI','Terraform','Jenkins','AWS','VMware'], delay: 'd1' },
+        { title: 'Cybersécurité', icon: 'shieldAlert', color: 'var(--blue)', items: ['Pentesting','Burp Suite','Metasploit','Firewall','Active Directory'], delay: 'd2' },
+        { title: 'Réseaux et OS', icon: 'server', color: 'var(--green)', items: ['Cisco','PFsense','OpenVPN','Nginx','Grafana','Linux','Windows'], delay: 'd3' },
+        { title: 'Développement', icon: 'brackets', color: 'var(--purple)', items: ['Python','Bash','JavaScript','C#','Java'], delay: 'd4' },
+        { title: 'Gestion de Projet', icon: 'list', color: 'var(--orange)', items: ['Agile Scrum','Jira','Trello','MS Project'], delay: 'd5' },
+        { title: 'Bases de données', icon: 'database', color: 'var(--rose)', items: ['SQL Server','MySQL','Firebase','Redis'], delay: 'd6' }
+      ],
+      terminalCommands: ['ls projects/', 'git log --oneline', 'docker ps -a', 'terraform plan', 'cat deployment.yml']
+    };
+
+    function $(selector, parent) {
+      return (parent || document).querySelector(selector);
+    }
+
+    function $$(selector, parent) {
+      return Array.from((parent || document).querySelectorAll(selector));
+    }
+
+    function createBadgeList(items) {
+      return items.map(function(item) {
+        return '<span class="badge">' + item + '</span>';
+      }).join('');
+    }
+
+    function renderDesktopNav(items) {
+      return '<nav class="desktop">'
+        + '<div class="nav-logo"><span>&gt; </span>D.DE-BERTHIN<span class="cursor-blink" style="color:var(--teal)">_</span></div>'
+        + '<div class="nav-links">'
+        + items.map(function(item, index) {
+            return '<button class="nav-link ' + (index === 0 ? 'active' : '') + '" data-target="' + item.id + '" type="button"><span class="dot"></span>' + item.label + '</button>';
+          }).join('')
+        + '</div>'
+        + '<a href="mailto:danideber1@gmail.com" class="nav-cta">Contacter</a>'
+        + '</nav>';
+    }
+
+    function renderMobileNav(items) {
+      return '<nav class="mobile">'
+        + items.map(function(item, index) {
+            return '<button class="dock-btn ' + (index === 0 ? 'active' : '') + '" data-target="' + item.id + '" type="button" aria-label="' + item.label + '">' + ICONS[item.icon] + '</button>';
+          }).join('')
+        + '</nav>';
+    }
+
+    function renderHeroTags(items) {
+      return items.map(function(item) {
+        return '<span class="hero-tag ' + item.className + '">' + item.label + '</span>';
+      }).join('');
+    }
+
+    function renderSocialLinks(items) {
+      return items.map(function(item) {
+        return '<a href="' + item.href + '" class="social-btn" target="_blank" rel="noreferrer" aria-label="' + item.label + '">' + ICONS[item.icon] + '</a>';
+      }).join('');
+    }
+
+    function renderStats(items) {
+      return items.map(function(item) {
+        return '<div class="stat-box"><div class="stat-num" style="color:' + item.color + '">' + item.value + '</div><div class="stat-lbl">' + item.label + '</div></div>';
+      }).join('');
+    }
+
+    function renderAboutSection(data) {
+      return '<div class="card-accent" style="background:linear-gradient(90deg, var(--blue), transparent)"></div>'
+        + '<p class="label">présentation</p>'
+        + '<h3 style="margin-top:10px">' + data.intro + '</h3>'
+        + data.paragraphs.map(function(paragraph) { return '<p>' + paragraph + '</p>'; }).join('');
+    }
+
+    function renderProfileCards(items) {
+      return items.map(function(item) {
+        return '<article class="card profile-card reveal ' + item.delay + '">'
+          + '<div class="card-accent" style="background:linear-gradient(90deg, ' + item.accent + ', transparent)"></div>'
+          + '<div style="color:' + item.iconColor + '">' + ICONS[item.icon] + '</div>'
+          + '<h3>' + item.title + '</h3>'
+          + '<p>' + item.text + '</p>'
+          + '<div class="tags">' + createBadgeList(item.tags) + '</div>'
+          + '</article>';
+      }).join('');
+    }
+
+    function renderExperienceItems(items) {
+      return items.map(function(item) {
+        return '<article class="tl-item reveal ' + item.delay + '">'
+          + '<div class="tl-dot ' + (item.colorClass === 'blue' ? 'blue' : '') + '"></div>'
+          + '<div class="card card-pad">'
+          + '<div class="row-wrap" style="margin-bottom:16px">'
+          + '<span class="exp-date ' + item.dateClass + '">' + item.date + '</span>'
+          + '<span class="exp-where">' + ICONS.marker + item.company + '</span>'
+          + '</div>'
+          + '<h3 style="margin-bottom:16px">' + item.title + '</h3>'
+          + '<ul class="exp-list">'
+          + item.bullets.map(function(bullet) {
+              return '<li><span class="exp-bullet ' + item.colorClass + '"></span>' + bullet + '</li>';
+            }).join('')
+          + '</ul></div></article>';
+      }).join('');
+    }
+
+    function getPreviewIconPath(type) {
+      var paths = {
+        server: '<rect x="2" y="2" width="20" height="8" rx="2"></rect><rect x="2" y="14" width="20" height="8" rx="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line>',
+        briefcase: '<line x1="6" y1="3" x2="6" y2="15"></line><circle cx="18" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M18 9a9 9 0 01-9 9"></path>'
+      };
+      return paths[type] || paths.server;
+    }
+
+    function renderProjectCards(items) {
+      return items.map(function(item) {
+        return '<article class="card proj-card">'
+          + '<div class="proj-preview">'
+          + '<svg class="icon-bg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">' + getPreviewIconPath(item.previewIcon) + '</svg>'
+          + '<div class="overlay-top"></div>'
+          + '<span class="proj-badge ' + item.badge.className + '">' + (item.badge.pulse ? '<span class="pulse"></span>' : '') + item.badge.text + '</span>'
+          + '</div>'
+          + '<div class="proj-body">'
+          + '<div class="row-between"><span class="proj-num">' + item.number + '</span><button class="proj-link" type="button" aria-label="Voir le projet ' + item.title + '">' + ICONS.external + '</button></div>'
+          + '<h3>' + item.title + '</h3>'
+          + '<p class="proj-desc">' + item.description + '</p>'
+          + '<div class="proj-tags">' + createBadgeList(item.tags) + '</div>'
+          + '</div></article>';
+      }).join('');
+    }
+
+    function renderSkillCards(items) {
+      return items.map(function(item) {
+        return '<article class="card skill-card reveal ' + item.delay + '">'
+          + '<div class="head"><div style="color:' + item.color + '">' + ICONS[item.icon] + '</div><span>' + item.title + '</span></div>'
+          + '<div class="badges">' + createBadgeList(item.items) + '</div>'
+          + '</article>';
+      }).join('');
+    }
+
+    function mountContent() {
+      $('#nav-desktop-root').innerHTML = renderDesktopNav(DATA.nav);
+      $('#nav-mobile-root').innerHTML = renderMobileNav(DATA.nav);
+      $('#hero-tags').innerHTML = renderHeroTags(DATA.heroTags);
+      $('#hero-social').innerHTML = renderSocialLinks(DATA.socialLinks);
+      $('#hero-stats').innerHTML = renderStats(DATA.stats);
+      $('#about-content').innerHTML = renderAboutSection(DATA.about);
+      $('#about-highlights').innerHTML = createBadgeList(DATA.about.highlights);
+      $('#profile-grid').innerHTML = renderProfileCards(DATA.profileCards);
+      $('#timeline').innerHTML = renderExperienceItems(DATA.experiences);
+      $('#projects-grid').innerHTML = renderProjectCards(DATA.projects);
+      $('#skills-grid').innerHTML = renderSkillCards(DATA.skillGroups);
+    }
+
+    function goTo(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      window.scrollTo({ top: el.getBoundingClientRect().top + window.pageYOffset - 68, behavior: 'smooth' });
+    }
+
+    function bindScrollTargets() {
+      document.addEventListener('click', function(event) {
+        var trigger = event.target.closest('[data-target], [data-scroll-target]');
+        if (!trigger) return;
+        var targetId = trigger.dataset.target || trigger.dataset.scrollTarget;
+        if (!targetId) return;
+        if (trigger.tagName === 'A') event.preventDefault();
+        goTo(targetId);
+      });
+    }
+
+    function setupResponsiveHero() {
+      var heroRight = $('#hero-right');
+      function syncHeroVisibility() {
+        heroRight.hidden = window.innerWidth < 900;
+      }
+      syncHeroVisibility();
+      window.addEventListener('resize', syncHeroVisibility);
+    }
+
+    function setupTypewriter() {
+      var typingEl = $('#term-typing');
+      if (!typingEl) return;
+      var commands = DATA.terminalCommands;
+      var commandIndex = 0;
+      var charIndex = 0;
+      var isTypingForward = true;
+      var timeoutId;
+
+      function loop() {
+        var command = commands[commandIndex];
+        if (isTypingForward) {
+          charIndex += 1;
+          typingEl.textContent = command.slice(0, charIndex);
+          if (charIndex >= command.length) {
+            isTypingForward = false;
+            timeoutId = setTimeout(loop, 1800);
+            return;
+          }
+          timeoutId = setTimeout(loop, 80);
+          return;
+        }
+
+        charIndex -= 1;
+        typingEl.textContent = command.slice(0, charIndex);
+        if (charIndex <= 0) {
+          isTypingForward = true;
+          commandIndex = (commandIndex + 1) % commands.length;
+          timeoutId = setTimeout(loop, 400);
+          return;
+        }
+        timeoutId = setTimeout(loop, 40);
+      }
+
+      timeoutId = setTimeout(loop, 1200);
+      window.addEventListener('beforeunload', function() { clearTimeout(timeoutId); });
+    }
+
+    function setupActiveNav() {
+      var sections = $$('section[id], footer[id]');
+      var desktopLinks = $$('nav.desktop .nav-link');
+      var mobileButtons = $$('nav.mobile .dock-btn');
+
+      function updateNav() {
+        var currentId = sections.length ? sections[0].id : 'accueil';
+        sections.forEach(function(section) {
+          if (window.scrollY >= section.offsetTop - 140) currentId = section.id;
+        });
+        desktopLinks.forEach(function(link) {
+          link.classList.toggle('active', link.dataset.target === currentId);
+        });
+        mobileButtons.forEach(function(button) {
+          button.classList.toggle('active', button.dataset.target === currentId);
+        });
+      }
+
+      window.addEventListener('scroll', updateNav, { passive: true });
+      updateNav();
+    }
+
+    function setupRevealOnScroll() {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        });
+      }, { threshold: 0.1 });
+
+      $$('.reveal').forEach(function(element) {
+        observer.observe(element);
+      });
+    }
+
+    function init() {
+      mountContent();
+      bindScrollTargets();
+      setupResponsiveHero();
+      setupTypewriter();
+      setupActiveNav();
+      setupRevealOnScroll();
+    }
+
+    init();
+  </script>
+</body>
+</html>
