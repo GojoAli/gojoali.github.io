@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Daniel DE-BERTHIN — Portfolio</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
+</head>
+<body>
+  <div class="glow-orb glow-1"></div>
+  <div class="glow-orb glow-2"></div>
+  <div class="glow-orb glow-3"></div>
+
+  <div id="nav-desktop-root"></div>
+  <div id="nav-mobile-root"></div>
+
+  <div class="z10" style="padding-bottom:80px">
+    <section id="accueil">
+      <div class="container">
+        <div class="hero-grid">
+          <div>
+            <div class="reveal d1">
+              <p class="label">&lt; portfolio /&gt;</p>
+              <h1 style="margin-top:12px">
+                <span class="glitch" data-text="Daniel">Daniel</span>
+                <span class="hero-title-line">DE-BERTHIN</span>
+              </h1>
+            </div>
+
+            <div class="reveal d2">
+              <div class="hero-tags" id="hero-tags"></div>
+            </div>
+
+            <div class="reveal d3">
+              <p class="hero-desc">Profil DevSecOps junior orienté automatisation. J'interviens sur le déploiement d'outils, le provisioning, la supervision et l'industrialisation d'environnements techniques avec une attention constante portée à la sécurité.</p>
+            </div>
+
+            <div class="reveal d4">
+              <div class="hero-btns">
+                <a href="#contact" data-scroll-target="contact" class="btn-primary pulse-glow">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  Me contacter
+                </a>
+                <button class="btn-secondary" type="button">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  CV.pdf
+                </button>
+              </div>
+            </div>
+
+            <div class="reveal d5">
+              <div class="hero-social" id="hero-social"></div>
+            </div>
+
+            <button class="scroll-hint bounce-y" data-scroll-target="profil" type="button">
+              scroll
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+          </div>
+
+          <div class="reveal d3" id="hero-right" hidden>
+            <div class="float">
+              <div class="term-corner">
+                <div class="terminal">
+                  <div class="term-bar">
+                    <span class="term-dot" style="background:#ff5f57"></span>
+                    <span class="term-dot" style="background:#febc2e"></span>
+                    <span class="term-dot" style="background:#28c840"></span>
+                    <span class="term-title">~/daniel/status.sh</span>
+                  </div>
+                  <div class="term-body">
+                    <div><span class="term-prompt">$ </span><span style="color:var(--text)">whoami</span></div>
+                    <div style="color:var(--muted); padding-left:12px">daniel.de-berthin</div>
+                    <div style="margin-top:12px"><span class="term-prompt">$ </span><span style="color:var(--text)">cat profile.json</span></div>
+                    <div style="padding-left:12px">
+                      <div><span class="term-key">"role"</span>: <span class="term-val">"DevSecOps junior orienté automatisation"</span>,</div>
+                      <div><span class="term-key">"location"</span>: <span class="term-val">"Reims / Paris / Nantes"</span>,</div>
+                      <div><span class="term-key">"status"</span>: <span class="term-val">"open_to_opportunities"</span>,</div>
+                      <div><span class="term-key">"focus"</span>: <span class="term-num">"automation / monitoring / secure infra"</span></div>
+                    </div>
+                    <div style="margin-top:12px"><span class="term-prompt">$ </span><span id="term-typing" style="color:var(--text)"></span><span class="cursor-blink" style="color:var(--teal)">▋</span></div>
+                  </div>
+                  <div class="scan-line"></div>
+                </div>
+              </div>
+              <div class="stats-row" id="hero-stats"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-line" style="margin:16px auto"></div>
+
+    <section id="apropos" class="section-pad">
+      <div class="container">
+        <div class="sec-header reveal"><p class="label">01 / à propos</p><h2>Qui je suis</h2></div>
+        <div class="about-grid">
+          <article class="card about-card reveal d1" id="about-content"></article>
+          <article class="card about-card reveal d2">
+            <div class="card-accent" style="background:linear-gradient(90deg, var(--teal), transparent)"></div>
+            <p class="label">repères</p>
+            <h3 style="margin-top:10px">Ce qui me définit</h3>
+            <div class="about-list" id="about-highlights"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <div class="glow-line"></div>
+
+    <section id="profil" class="section-pad">
+      <div class="container">
+        <div class="sec-header reveal"><p class="label">01 / profil</p><h2>Ce que je fais</h2></div>
+        <div class="profile-grid" id="profile-grid"></div>
+      </div>
+    </section>
+
+    <div class="glow-line"></div>
+
+    <section id="experiences" class="section-pad">
+      <div class="container-lg">
+        <div class="sec-header reveal"><p class="label">02 / expériences</p><h2>Parcours</h2></div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+    </section>
+
+    <div class="glow-line"></div>
+
+    <section id="formation" class="section-pad">
+      <div class="container">
+        <div class="sec-header reveal"><p class="label">03 / formation</p><h2>Formation &amp; projets académiques</h2></div>
+        <div class="edu-grid" id="education-grid"></div>
+        <div class="academic-grid" id="academic-projects"></div>
+      </div>
+    </section>
+
+    <div class="glow-line"></div>
+
+    <section id="projets" class="section-pad">
+      <div class="container">
+        <div class="sec-header reveal"><p class="label">04 / projets</p><h2>Cas concrets</h2></div>
+        <div class="projects-scroll reveal d1" id="projects-grid"></div>
+      </div>
+    </section>
+
+    <div class="glow-line"></div>
+
+    <section id="competences" class="section-pad">
+      <div class="container">
+        <div class="sec-header reveal"><p class="label">05 / stack</p><h2>Stack Technique</h2></div>
+        <div class="skills-grid" id="skills-grid"></div>
+      </div>
+    </section>
+
+    <footer id="contact">
+      <div class="glow-line" style="margin-bottom:56px"></div>
+      <div class="footer-inner reveal">
+        <p class="label" style="margin-bottom:10px">06 / contact</p>
+        <h2 style="margin-bottom:16px">Disponible pour un poste junior</h2>
+        <p>Je recherche un premier poste CDI junior en DevSecOps, infrastructure ou automatisation, avec un environnement où industrialisation, fiabilité et sécurité font partie du quotidien.</p>
+        <div class="footer-btns">
+          <a href="mailto:danideber1@gmail.com" class="btn-primary pulse-glow">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            danideber1@gmail.com
+          </a>
+          <div class="footer-loc">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Reims / Paris / Nantes
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Daniel DE-BERTHIN</span>
+        <span class="eof">EOF</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
