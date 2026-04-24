@@ -372,7 +372,8 @@
     @media (min-width:640px) { .profile-grid { grid-template-columns:1fr 1fr; } }
     @media (min-width:960px) { .profile-grid { grid-template-columns:1fr 1fr 1fr; } }
     .profile-card { padding:32px; }
-    .profile-card .icon { width:40px; height:40px; margin-bottom:20px; }
+    .profile-card .icon-wrap { width:40px; height:40px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
+    .profile-card .icon { width:100%; height:100%; display:block; flex-shrink:0; }
     .profile-card p { color:var(--muted); font-size:14px; line-height:1.7; margin:12px 0 20px; }
     .profile-card .tags { display:flex; flex-wrap:wrap; gap:8px; }
 
@@ -400,6 +401,18 @@
     .exp-bullet { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:7px; }
     .exp-bullet.teal { background:var(--teal); }
     .exp-bullet.blue { background:var(--blue); }
+
+    /* ===================== EDUCATION ===================== */
+    .edu-grid { display:grid; grid-template-columns:1fr; gap:20px; }
+    @media (min-width:900px) { .edu-grid { grid-template-columns:1fr 1fr; } }
+    .edu-card { padding:28px; }
+    .edu-meta { font-family:var(--mono); font-size:12px; color:var(--muted); margin:10px 0 14px; }
+    .edu-card p { color:var(--muted); font-size:14px; line-height:1.7; margin-bottom:18px; }
+    .academic-grid { display:grid; grid-template-columns:1fr; gap:20px; margin-top:24px; }
+    @media (min-width:768px) { .academic-grid { grid-template-columns:1fr 1fr 1fr; } }
+    .academic-card { padding:28px; }
+    .academic-card p { color:var(--muted); font-size:14px; line-height:1.7; margin:12px 0 18px; }
+    .academic-card .icon-wrap { width:44px; height:44px; display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
 
     /* ===================== PROJECTS ===================== */
     .projects-scroll { display:flex; gap:20px; overflow-x:auto; padding-bottom:16px; margin:0 -24px; padding-left:24px; padding-right:24px; scroll-snap-type:x mandatory; }
@@ -432,6 +445,8 @@
     .skill-card .head svg { width:22px; height:22px; }
     .skill-card .head span { font-family:var(--mono); font-size:13px; color:var(--white); }
     .skill-card .badges { display:flex; flex-wrap:wrap; gap:8px; }
+    .skill-levels { display:flex; flex-direction:column; gap:16px; }
+    .skill-level-label { font-family:var(--mono); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
 
     /* ===================== FOOTER ===================== */
     footer { padding:80px 24px 40px; }
@@ -476,7 +491,7 @@
             </div>
 
             <div class="reveal d3">
-              <p class="hero-desc">Étudiant-entrepreneur passionné par l'automatisation, la cybersécurité et la gestion d'infrastructures. Je conçois, sécurise et livre des solutions IT de bout en bout.</p>
+              <p class="hero-desc">Profil DevSecOps junior orienté automatisation. J'interviens sur le déploiement d'outils, le provisioning, la supervision et l'industrialisation d'environnements techniques avec une attention constante portée à la sécurité.</p>
             </div>
 
             <div class="reveal d4">
@@ -517,10 +532,10 @@
                     <div style="color:var(--muted); padding-left:12px">daniel.de-berthin</div>
                     <div style="margin-top:12px"><span class="term-prompt">$ </span><span style="color:var(--text)">cat profile.json</span></div>
                     <div style="padding-left:12px">
-                      <div><span class="term-key">"role"</span>: <span class="term-val">"Ingénieur DevOps &amp; CyberSec"</span>,</div>
+                      <div><span class="term-key">"role"</span>: <span class="term-val">"DevSecOps junior orienté automatisation"</span>,</div>
                       <div><span class="term-key">"location"</span>: <span class="term-val">"Reims / Paris / Nantes"</span>,</div>
                       <div><span class="term-key">"status"</span>: <span class="term-val">"open_to_opportunities"</span>,</div>
-                      <div><span class="term-key">"focus"</span>: <span class="term-num">"automation / security / delivery"</span></div>
+                      <div><span class="term-key">"focus"</span>: <span class="term-num">"automation / monitoring / secure infra"</span></div>
                     </div>
                     <div style="margin-top:12px"><span class="term-prompt">$ </span><span id="term-typing" style="color:var(--text)"></span><span class="cursor-blink" style="color:var(--teal)">▋</span></div>
                   </div>
@@ -555,7 +570,7 @@
 
     <section id="profil" class="section-pad">
       <div class="container">
-        <div class="sec-header reveal"><p class="label">01 / profil</p><h2>À Propos</h2></div>
+        <div class="sec-header reveal"><p class="label">01 / profil</p><h2>Ce que je fais</h2></div>
         <div class="profile-grid" id="profile-grid"></div>
       </div>
     </section>
@@ -571,9 +586,19 @@
 
     <div class="glow-line"></div>
 
+    <section id="formation" class="section-pad">
+      <div class="container">
+        <div class="sec-header reveal"><p class="label">03 / formation</p><h2>Formation &amp; projets académiques</h2></div>
+        <div class="edu-grid" id="education-grid"></div>
+        <div class="academic-grid" id="academic-projects"></div>
+      </div>
+    </section>
+
+    <div class="glow-line"></div>
+
     <section id="projets" class="section-pad">
       <div class="container">
-        <div class="sec-header reveal"><p class="label">03 / projets</p><h2>Projets Phares</h2></div>
+        <div class="sec-header reveal"><p class="label">04 / projets</p><h2>Cas concrets</h2></div>
         <div class="projects-scroll reveal d1" id="projects-grid"></div>
       </div>
     </section>
@@ -582,7 +607,7 @@
 
     <section id="competences" class="section-pad">
       <div class="container">
-        <div class="sec-header reveal"><p class="label">04 / stack</p><h2>Stack Technique</h2></div>
+        <div class="sec-header reveal"><p class="label">05 / stack</p><h2>Stack Technique</h2></div>
         <div class="skills-grid" id="skills-grid"></div>
       </div>
     </section>
@@ -590,9 +615,9 @@
     <footer id="contact">
       <div class="glow-line" style="margin-bottom:56px"></div>
       <div class="footer-inner reveal">
-        <p class="label" style="margin-bottom:10px">05 / contact</p>
-        <h2 style="margin-bottom:16px">Prêt à innover ?</h2>
-        <p>Si mon profil correspond à votre équipe, discutons de la façon dont nous pouvons atteindre vos objectifs techniques.</p>
+        <p class="label" style="margin-bottom:10px">06 / contact</p>
+        <h2 style="margin-bottom:16px">Disponible pour un poste junior</h2>
+        <p>Je recherche un premier poste CDI junior en DevSecOps, infrastructure ou automatisation, avec un environnement où industrialisation, fiabilité et sécurité font partie du quotidien.</p>
         <div class="footer-btns">
           <a href="mailto:danideber1@gmail.com" class="btn-primary pulse-glow">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -605,7 +630,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2025 Daniel DE-BERTHIN</span>
+        <span>© 2026 Daniel DE-BERTHIN</span>
         <span class="eof">EOF</span>
       </div>
     </footer>
@@ -625,10 +650,10 @@
       shieldCheck: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg>',
       projectGrid: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="5" height="5"></rect><rect x="16" y="3" width="5" height="5"></rect><rect x="3" y="16" width="5" height="5"></rect><path d="M21 16h-3a2 2 0 00-2 2v3"></path><path d="M21 21v.01"></path><path d="M12 7v3a2 2 0 01-2 2H7"></path></svg>',
       marker: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>',
-      external: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"></path></svg>',
+      external: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3h7v7"></path><path d="M10 14L21 3"></path><path d="M21 14v4a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h4"></path></svg>',
       cloud: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"></path></svg>',
       shieldAlert: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>',
-      server: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"></rect><rect x="2" y="14" width="20" height="8" rx="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>',
+      server: '<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2"></rect><rect x="2" y="14" width="20" height="8" rx="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>',
       brackets: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>',
       list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>',
       database: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>'
@@ -640,63 +665,65 @@
         { id: 'apropos', label: 'à propos', icon: 'user' },
         { id: 'profil', label: 'profil', icon: 'user' },
         { id: 'experiences', label: 'expériences', icon: 'briefcase' },
+        { id: 'formation', label: 'formation', icon: 'database' },
         { id: 'projets', label: 'projets', icon: 'layers' },
         { id: 'competences', label: 'compétences', icon: 'grid' }
       ],
       heroTags: [
-        { label: 'DevOps', className: 'tag-teal' },
-        { label: 'Cybersécurité', className: 'tag-blue' },
-        { label: 'Chef de Projet IT', className: 'tag-green' }
+        { label: 'DevSecOps', className: 'tag-teal' },
+        { label: 'Automatisation', className: 'tag-blue' },
+        { label: 'Infrastructure sécurisée', className: 'tag-green' }
       ],
       socialLinks: [
         { href: '#', icon: 'github', label: 'GitHub' },
-        { href: '#', icon: 'linkedin', label: 'LinkedIn' },
+        { href: 'https://www.linkedin.com/in/daniel-de-berthin-013b3929b/', icon: 'linkedin', label: 'LinkedIn' },
         { href: '#', icon: 'shield', label: 'Profil sécurité' }
       ],
       stats: [
-        { value: '2+', label: 'ans XP', color: 'var(--blue)' },
-        { value: '3', label: 'villes', color: 'var(--teal)' },
-        { value: '20+', label: 'outils', color: 'var(--green)' }
+        { value: '4', label: 'expériences', color: 'var(--blue)' },
+        { value: 'Ansible', label: 'provisioning', color: 'var(--teal)' },
+        { value: 'CI/CD', label: 'axe fort', color: 'var(--green)' }
       ],
       about: {
-        intro: "Je m'appelle Daniel DE-BERTHIN. Je suis étudiant-entrepreneur et j’évolue à l’intersection du DevOps, de la cybersécurité et de la gestion de projet IT.",
+        intro: "Je m'appelle Daniel DE-BERTHIN. Mon parcours m'a progressivement amené du développement web vers l'administration système, le DevOps et l'automatisation appliquée à des environnements d'exploitation réels.",
         paragraphs: [
-          "J’aime construire des environnements fiables, automatiser les tâches répétitives et transformer des besoins techniques en solutions concrètes, utiles et maintenables.",
-          "Mon approche repose sur trois piliers : la rigueur dans l’exécution, la curiosité technique au quotidien et une vraie attention portée à la qualité de livraison.",
-          "Au-delà de la technique, j’apprécie aussi le travail d’équipe, la structuration des projets et la capacité à faire avancer un sujet de bout en bout, de l’idée jusqu’à la mise en production."
+          "Chez Innovqube, j'ai déployé et intégré des outils comme Wazuh, EspoCRM et Postiz, travaillé sur LDAP, la gestion du stockage, la supervision et la sécurisation des accès dans un contexte d'administration système et DevOps.",
+          "Chez NXO, j'ai renforcé cette orientation en automatisant des traitements métier, en collectant des données d'équipements infogérés, en mettant en place un lab national, en faisant du provisioning Ansible, de la CI/CD et de l'outillage d'analyse de configuration.",
+          "Ma formation complète ce socle avec des projets académiques sur AWS serverless, Jenkins CI/CD, automatisation d'infrastructure réseau, CTF cyber et développement d'applications, ce qui me donne une base technique large mais orientée vers l'infra et l'automatisation.",
+          "Je vise aujourd'hui un CDI junior dans lequel je peux contribuer à l'industrialisation d'une plateforme, automatiser des workflows d'exploitation, améliorer l'observabilité et intégrer la sécurité dans les opérations du quotidien."
         ],
         highlights: [
-          'Approche orientée résultat',
-          'Culture de l’automatisation',
-          'Sens du détail',
-          'Communication claire'
+          "Déploiement d'outils & intégration",
+          'Provisioning & automatisation',
+          'Supervision & sécurité appliquée',
+          'Progression terrain sur 4 expériences'
         ]
       },
       profileCards: [
         {
-          title: 'DevOps & Automatisation',
-          text: "Je vois l'automatisation comme une façon d'aborder le monde. Déploiement CI/CD, conteneurisation (Docker, LXC) et IaC (Terraform) pour optimiser les processus à grande échelle.",
-          tags: ['Docker', 'Terraform', 'CI/CD'],
+          title: 'Automatisation & industrialisation',
+          text: "J'automatise des traitements et des workflows d'exploitation pour réduire les actions manuelles: scripts, CI/CD, collecte de données techniques, génération documentaire et standardisation des opérations récurrentes.",
+          tags: ['Bash', 'Python', 'GitLab CI', 'Excel/Word'],
           accent: 'var(--teal)',
           icon: 'code',
           iconColor: 'var(--teal)',
           delay: 'd1'
         },
         {
-          title: 'Cybersécurité',
-          text: 'Passionné par la sécurité offensive et défensive, je développe des compétences en pentesting, configuration pare-feu, durcissement des systèmes et audit de sécurité.',
-          tags: ['Pentesting', 'Burp Suite', 'Active Directory'],
+          title: 'Administration système & infrastructure sécurisée',
+          text: "Je déploie et maintiens des environnements techniques complets: installation de services, gestion du stockage, configuration réseau, contrôle d'accès, exposition maîtrisée et stabilité des composants d'infrastructure.",
+          tags: ['Linux', 'LDAP', 'Stockage', 'Réseau'],
           accent: 'var(--blue)',
-          icon: 'shieldCheck',
+          icon: 'server',
           iconColor: 'var(--blue)',
           delay: 'd2'
         },
         {
-          title: 'Gestion de Projet IT',
-          text: 'Application rigoureuse des méthodes Agile Scrum. Planification, suivi des sprints et communication fluide entre équipes techniques et clients.',
-          tags: ['Scrum', 'Jira', 'Trello'],
+          title: 'Supervision, provisioning & sécurité appliquée',
+          text: "Je combine supervision, provisioning et bonnes pratiques de sécurité pour rendre les environnements plus observables, plus fiables et plus simples à exploiter sur la durée.",
+          tags: ['Wazuh', 'Ansible', 'Monitoring', 'Hardening'],
           accent: 'var(--green)',
-          icon: 'projectGrid',
+          icon: 'shieldCheck',
           iconColor: 'var(--green)',
           delay: 'd3'
         }
@@ -706,54 +733,170 @@
           date: 'Sept. 2025 — Août 2026',
           dateClass: 'teal',
           company: 'NXO, Nantes',
-          title: 'Ingénieur Incident & Automatisation',
+          title: 'Alternance, Ingénieur Services (DevOps & incident)',
           bullets: [
-            "Conception et déploiement d'outils d'automatisation pour la gestion des incidents réseau.",
-            'Support technique avancé sur infrastructures réseau multi-sites.'
+            "Contexte: alternance sur des environnements d'exploitation et de support avec équipements infogérés, tickets clients, visites préventives et sujets d'automatisation à fort impact opérationnel.",
+            "Actions: automatisation du renouvellement d'abonnements clients, collecte d'informations sur les équipements du groupe, provisioning avec Ansible, participation aux pipelines CI/CD et traitement des tickets sur des environnements de production.",
+            "Impact: réduction du temps passé sur des tâches récurrentes, amélioration de la qualité de collecte des données techniques et montée en compétence concrète sur l'industrialisation d'opérations d'exploitation.",
+            "Actions complémentaires: mise en place d'un lab à portée nationale avec câblage, configuration réseau et logicielle, développement d'un outil d'analyse de configuration SBC Oracle et architecture Excel/Word pour générer des documents à partir de plusieurs classeurs."
           ],
           colorClass: 'teal',
           delay: 'd1'
         },
         {
-          date: '2024 — 2026',
+          date: 'Janv. 2025 — Avril 2025',
           dateClass: 'blue',
-          company: "Créativ'Labz, Reims",
-          title: 'Étudiant-Entrepreneur IT',
+          company: 'Innovqube, Paris',
+          title: 'Stage, Administrateur Système & DevOps',
           bullets: [
-            'Planification de sprints Scrum, suivi via Jira et Trello.',
-            'Setup infrastructure IT et définition des politiques de sécurité.'
+            "Contexte: stage orienté administration système et DevOps avec déploiement de solutions utiles à l'exploitation, au pilotage et à la supervision d'un environnement technique.",
+            "Actions: déploiement de Postiz pour la gestion des réseaux sociaux, de Wazuh pour la supervision et d'EspoCRM, avec intégration de LDAP à EspoCRM pour structurer les accès.",
+            "Actions complémentaires: travail sur le stockage, la sécurité des accès, le monitoring et l'automatisation de l'infrastructure pour rendre l'environnement plus exploitable et plus maintenable.",
+            "Impact: première expérience structurante en déploiement de services, intégration système et pratiques DevOps appliquées à des usages concrets."
           ],
           colorClass: 'blue',
           delay: 'd2'
+        },
+        {
+          date: '2024 — 2026',
+          dateClass: 'teal',
+          company: "Créativ'Labz, Reims",
+          title: 'Étudiant-Entrepreneur',
+          bullets: [
+            "Contexte: développement d'un projet entrepreneurial avec enjeux produit, diffusion, organisation et structuration technique.",
+            "Actions: développement d'une application mobile, déploiement sur le Play Store et l'App Store, gestion et planification des tâches, organisation d'entretiens et gestion des réseaux sociaux.",
+            "Actions complémentaires: gestion de l'infrastructure IT, mise en place de normes de sécurité et levée de fonds obtenue auprès de la région Grand Est et de l'université de Reims.",
+            "Impact: expérience utile sur la livraison de produit, la priorisation et le lien entre contraintes métier, diffusion et exécution technique."
+          ],
+          colorClass: 'teal',
+          delay: 'd3'
+        },
+        {
+          date: 'Juin 2024 — Août 2024',
+          dateClass: 'blue',
+          company: 'Stage développeur web',
+          title: 'Développement web & intégration',
+          bullets: [
+            "Contexte: première expérience structurée de delivery web avec mise en ligne de fonctionnalités orientées usage.",
+            "Actions: développement sous WordPress et Elementor, maquettage sur Figma, intégration PayPal et gestion de l'hébergement web.",
+            "Impact: base solide en intégration, en mise en production et en compréhension du cycle complet entre interface, contenu et déploiement."
+          ],
+          colorClass: 'blue',
+          delay: 'd4'
+        }
+      ],
+      education: [
+        {
+          title: 'Master Réseaux & Télécommunications',
+          school: 'Université de Reims',
+          meta: 'Formation orientée preuve technique',
+          description: "Formation centrée sur l'infrastructure, les réseaux et l'automatisation. J'y ai pratiqué la configuration de services comme DNS et DHCP, puis l'automatisation de ces tâches avec des outils dédiés, tout en consolidant mes bases en exploitation et en sécurité.",
+          tags: ['DNS', 'DHCP', 'Automatisation', 'Réseaux', 'Infrastructure'],
+          accent: 'var(--teal)',
+          delay: 'd1'
+        },
+        {
+          title: 'Licence Informatique parcours MIAGE',
+          school: 'Université Paris Cité',
+          meta: 'Polyvalence technique & apprentissage rapide',
+          description: "La licence m'a donné une base technique large: mini SGBD en Java, programme de gestion de bornes de recharge, projet Unity 3D avec auto-formation rapide et usage de SVN, ainsi qu'une ouverture sur la gestion financière et l'analyse stratégique.",
+          tags: ['Java', 'Unity 3D', 'SVN', 'MIAGE'],
+          accent: 'var(--blue)',
+          delay: 'd2'
+        }
+      ],
+      academicProjects: [
+        {
+          title: 'Architecture serverless sur AWS',
+          text: "Conception d'une plateforme de vote serverless avec frontend statique sur S3, API Gateway, Lambda, SQS, DynamoDB et URLs pré-signées pour sécuriser l'accès aux documents. Le projet a été pensé avec une logique de scalabilité, de sécurité et d'optimisation des coûts.",
+          tags: ['AWS', 'Lambda', 'API Gateway', 'SQS', 'DynamoDB', 'S3'],
+          accent: 'var(--teal)',
+          icon: 'cloud',
+          delay: 'd1'
+        },
+        {
+          title: 'Infrastructure CI/CD avec Jenkins',
+          text: "Mise en place d'une infrastructure CI/CD sur 4 VMs avec Jenkins master, agent dédié, SSH, Maven, Docker, préproduction et production. Le pipeline couvre build, tests, déploiement, orchestration des environnements et logique de séparation des rôles.",
+          tags: ['Jenkins', 'Maven', 'Docker', 'SSH', 'CI/CD', 'VM'],
+          accent: 'var(--blue)',
+          icon: 'briefcase',
+          delay: 'd2'
+        },
+        {
+          title: 'Infra & automatisation en TP réseau',
+          text: "Réalisation de TP autour de services d'infrastructure comme DNS et DHCP, avec automatisation de certaines configurations. En parallèle, participation à un CTF cyber et développement d'une vidéothèque Flask + MongoDB via l'API TheMovieDB.",
+          tags: ['DNS', 'DHCP', 'Automation', 'CTF', 'Flask', 'MongoDB'],
+          accent: 'var(--green)',
+          icon: 'server',
+          delay: 'd3'
         }
       ],
       projects: [
         {
-          number: '01 / homelab',
-          title: 'Homelab et Infrastructure',
-          description: "Déploiement d'un homelab complet avec Proxmox, réseau PFsense segmenté en VLANs, conteneurs LXC, monitoring Grafana/Prometheus et accès VPN sécurisé.",
-          tags: ['Proxmox', 'PFsense', 'Grafana', 'OpenVPN'],
-          badge: { text: 'En ligne', className: 'online', pulse: true },
-          previewIcon: 'server'
+          number: '01 / medplay',
+          title: 'Architecture de MedPlay',
+          description: "Mise en place de l'architecture de MedPlay, une application web de mini-jeux en ligne conçue pour les futurs étudiants en santé. Le projet met l'accent sur la structuration technique et la mise à disposition d'une plateforme web orientée usage. Référence publique: https://medplay.medemerite.fr.",
+          href: 'https://medplay.medemerite.fr',
+          tags: ['Architecture', 'Web', 'Plateforme', 'Santé'],
+          badge: { text: 'Projet web', className: 'online', pulse: true },
+          previewIcon: 'briefcase'
         },
         {
-          number: '02 / devops',
-          title: 'Automatisation CI/CD et IaC',
-          description: "Création de pipelines CI/CD avec GitLab Runner, provisionnement d'infrastructures Cloud as Code via Terraform et gestion des déploiements Docker conteneurisés.",
-          tags: ['GitLab CI', 'Terraform', 'Docker'],
-          badge: { text: 'GitLab CI', className: 'tech', pulse: false },
-          previewIcon: 'briefcase'
+          number: '02 / infra',
+          title: 'Infrastructure sécurisée multi-VM',
+          description: "Mise en place d'une infrastructure sécurisée entre plusieurs machines virtuelles, avec un réseau interne basé sur WireGuard et une supervision de type SIEM avec Wazuh. Le projet met en avant le cloisonnement, la sécurisation des échanges et la supervision d'un environnement distribué.",
+          tags: ['WireGuard', 'Wazuh', 'VM', 'Réseau interne', 'Monitoring'],
+          badge: { text: 'Infra sécurisée', className: 'tech', pulse: false },
+          previewIcon: 'server'
         }
       ],
       skillGroups: [
-        { title: 'DevOps et Cloud', icon: 'cloud', color: 'var(--teal)', items: ['Docker','LXC','Gitlab CI','Terraform','Jenkins','AWS','VMware'], delay: 'd1' },
-        { title: 'Cybersécurité', icon: 'shieldAlert', color: 'var(--blue)', items: ['Pentesting','Burp Suite','Metasploit','Firewall','Active Directory'], delay: 'd2' },
-        { title: 'Réseaux et OS', icon: 'server', color: 'var(--green)', items: ['Cisco','PFsense','OpenVPN','Nginx','Grafana','Linux','Windows'], delay: 'd3' },
-        { title: 'Développement', icon: 'brackets', color: 'var(--purple)', items: ['Python','Bash','JavaScript','C#','Java'], delay: 'd4' },
-        { title: 'Gestion de Projet', icon: 'list', color: 'var(--orange)', items: ['Agile Scrum','Jira','Trello','MS Project'], delay: 'd5' },
-        { title: 'Bases de données', icon: 'database', color: 'var(--rose)', items: ['SQL Server','MySQL','Firebase','Redis'], delay: 'd6' }
+        {
+          title: 'Automatisation & delivery',
+          icon: 'cloud',
+          color: 'var(--teal)',
+          levels: [
+            { label: 'Usage régulier', items: ['GitLab CI', 'Bash', 'Python', 'Ansible'] },
+            { label: 'Bon niveau opérationnel', items: ['Docker', 'Excel/Word automation', 'Provisioning', 'Jenkins'] },
+            { label: 'Bases / en progression', items: ['Terraform', 'AWS', 'VMware'] }
+          ],
+          delay: 'd1'
+        },
+        {
+          title: 'Infrastructure & réseau',
+          icon: 'server',
+          color: 'var(--blue)',
+          levels: [
+            { label: 'Usage régulier', items: ['Linux', 'LDAP', 'Réseau', 'Stockage'] },
+            { label: 'Bon niveau opérationnel', items: ['PFsense', 'OpenVPN', 'Windows Server', 'DNS/DHCP'] },
+            { label: 'Bases / en progression', items: ['Cisco', 'SBC Oracle', 'AudioCodes'] }
+          ],
+          delay: 'd2'
+        },
+        {
+          title: 'Sécurité appliquée',
+          icon: 'shieldAlert',
+          color: 'var(--green)',
+          levels: [
+            { label: 'Usage régulier', items: ['Wazuh', "Contrôle d'accès", 'Hardening Linux', 'Monitoring'] },
+            { label: 'Bon niveau opérationnel', items: ['Pare-feu', 'Audit de configuration', 'Segmentation réseau'] },
+            { label: 'Bases / en progression', items: ['Active Directory', 'Analyse de vulnérabilités', 'WebEx Calling'] }
+          ],
+          delay: 'd3'
+        },
+        {
+          title: 'Applications & intégration',
+          icon: 'database',
+          color: 'var(--rose)',
+          levels: [
+            { label: 'Usage régulier', items: ['WordPress', 'Elementor', 'JavaScript', 'Figma'] },
+            { label: 'Bon niveau opérationnel', items: ['EspoCRM', 'Postiz', 'PayPal', 'Flask', 'MongoDB'] },
+            { label: 'Bases / en progression', items: ['C#', 'SQL Server', 'Firebase', 'SVN'] }
+          ],
+          delay: 'd4'
+        }
       ],
-      terminalCommands: ['ls projects/', 'git log --oneline', 'docker ps -a', 'terraform plan', 'cat deployment.yml']
+      terminalCommands: ['ansible-playbook site.yml', 'wazuh-manager status', 'docker compose ps', 'gitlab-runner verify', 'ldapsearch -x']
     };
 
     function $(selector, parent) {
@@ -819,7 +962,7 @@
       return items.map(function(item) {
         return '<article class="card profile-card reveal ' + item.delay + '">'
           + '<div class="card-accent" style="background:linear-gradient(90deg, ' + item.accent + ', transparent)"></div>'
-          + '<div style="color:' + item.iconColor + '">' + ICONS[item.icon] + '</div>'
+          + '<div class="icon-wrap" style="color:' + item.iconColor + '">' + ICONS[item.icon] + '</div>'
           + '<h3>' + item.title + '</h3>'
           + '<p>' + item.text + '</p>'
           + '<div class="tags">' + createBadgeList(item.tags) + '</div>'
@@ -845,6 +988,31 @@
       }).join('');
     }
 
+    function renderEducationCards(items) {
+      return items.map(function(item) {
+        return '<article class="card edu-card reveal ' + item.delay + '">'
+          + '<div class="card-accent" style="background:linear-gradient(90deg, ' + item.accent + ', transparent)"></div>'
+          + '<p class="label">formation</p>'
+          + '<h3 style="margin-top:10px">' + item.title + '</h3>'
+          + '<p class="edu-meta">' + item.school + ' / ' + item.meta + '</p>'
+          + '<p>' + item.description + '</p>'
+          + '<div class="tags">' + createBadgeList(item.tags) + '</div>'
+          + '</article>';
+      }).join('');
+    }
+
+    function renderAcademicProjectCards(items) {
+      return items.map(function(item) {
+        return '<article class="card academic-card reveal ' + item.delay + '">'
+          + '<div class="card-accent" style="background:linear-gradient(90deg, ' + item.accent + ', transparent)"></div>'
+          + '<div class="icon-wrap" style="color:' + item.accent + '">' + ICONS[item.icon] + '</div>'
+          + '<h3>' + item.title + '</h3>'
+          + '<p>' + item.text + '</p>'
+          + '<div class="tags">' + createBadgeList(item.tags) + '</div>'
+          + '</article>';
+      }).join('');
+    }
+
     function getPreviewIconPath(type) {
       var paths = {
         server: '<rect x="2" y="2" width="20" height="8" rx="2"></rect><rect x="2" y="14" width="20" height="8" rx="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line>',
@@ -855,6 +1023,9 @@
 
     function renderProjectCards(items) {
       return items.map(function(item) {
+        var projectLink = item.href
+          ? '<a href="' + item.href + '" class="proj-link" target="_blank" rel="noreferrer" aria-label="Voir le projet ' + item.title + '">' + ICONS.external + '</a>'
+          : '<button class="proj-link" type="button" aria-label="Voir le projet ' + item.title + '">' + ICONS.external + '</button>';
         return '<article class="card proj-card">'
           + '<div class="proj-preview">'
           + '<svg class="icon-bg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">' + getPreviewIconPath(item.previewIcon) + '</svg>'
@@ -862,7 +1033,7 @@
           + '<span class="proj-badge ' + item.badge.className + '">' + (item.badge.pulse ? '<span class="pulse"></span>' : '') + item.badge.text + '</span>'
           + '</div>'
           + '<div class="proj-body">'
-          + '<div class="row-between"><span class="proj-num">' + item.number + '</span><button class="proj-link" type="button" aria-label="Voir le projet ' + item.title + '">' + ICONS.external + '</button></div>'
+          + '<div class="row-between"><span class="proj-num">' + item.number + '</span>' + projectLink + '</div>'
           + '<h3>' + item.title + '</h3>'
           + '<p class="proj-desc">' + item.description + '</p>'
           + '<div class="proj-tags">' + createBadgeList(item.tags) + '</div>'
@@ -874,7 +1045,11 @@
       return items.map(function(item) {
         return '<article class="card skill-card reveal ' + item.delay + '">'
           + '<div class="head"><div style="color:' + item.color + '">' + ICONS[item.icon] + '</div><span>' + item.title + '</span></div>'
-          + '<div class="badges">' + createBadgeList(item.items) + '</div>'
+          + '<div class="skill-levels">'
+          + item.levels.map(function(level) {
+              return '<div><p class="skill-level-label">' + level.label + '</p><div class="badges">' + createBadgeList(level.items) + '</div></div>';
+            }).join('')
+          + '</div>'
           + '</article>';
       }).join('');
     }
@@ -889,6 +1064,8 @@
       $('#about-highlights').innerHTML = createBadgeList(DATA.about.highlights);
       $('#profile-grid').innerHTML = renderProfileCards(DATA.profileCards);
       $('#timeline').innerHTML = renderExperienceItems(DATA.experiences);
+      $('#education-grid').innerHTML = renderEducationCards(DATA.education);
+      $('#academic-projects').innerHTML = renderAcademicProjectCards(DATA.academicProjects);
       $('#projects-grid').innerHTML = renderProjectCards(DATA.projects);
       $('#skills-grid').innerHTML = renderSkillCards(DATA.skillGroups);
     }
